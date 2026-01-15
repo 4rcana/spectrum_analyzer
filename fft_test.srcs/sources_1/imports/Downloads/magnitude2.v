@@ -17,15 +17,12 @@ module magnitude2 (
     reg         valid_reg;
     reg         tlast_reg;
 
-    // Interpret FFT output halves as signed two's complement
     wire signed [15:0] im_s = i_axis_tdata[31:16];
     wire signed [15:0] re_s = i_axis_tdata[15:0];
 
-    // Signed multiply; square is non-negative
     wire [31:0] re_sq = $signed(re_s) * $signed(re_s);
     wire [31:0] im_sq = $signed(im_s) * $signed(im_s);
 
-    // Widen before add (keep full precision comfortably)
     wire [33:0] sum_next = {2'b0, re_sq} + {2'b0, im_sq};
 
     assign i_axis_tready = !valid_reg || o_axis_tready;

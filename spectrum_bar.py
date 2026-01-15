@@ -5,53 +5,63 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import serial as sr
 import serial.tools.list_ports
+import time
 
 # Konstantos
 DEFAULT_BAUDRATE = 921600
 FFT_BINS = 1024
+FREQ = 65000000
 
 # Kintamieji
 UART_Started = False # Apsauga, kad duomenys nebūtų nuskaitomi, kol COM PORT uždarytas
 COM_Port_Selected = None
 COM_Port = None
 
-chart_x_data = np.zeros(1024)
-chart_y_data = np.zeros(1024)
+chart_x_data = np.linspace(-FREQ/2, FREQ/2, FFT_BINS)
+#chart_x_data = np.arange(FFT_BINS) * (FREQ / FFT_BINS)
+chart_y_data = np.zeros(FFT_BINS)
 
 # Funkcijos
 # COM PORT aptarnavimo funkcija
 def Display_UART_Data():
     global COM_Port_Selected, UART_Started, chart_x_data, chart_y_data
     if UART_Started and COM_Port_Selected.in_waiting > 0:
+
+        # --- Measure COM read time ---
+        start_read = time.perf_counter()
+
         for i in range(FFT_BINS):
             try:
                 decoded_data = COM_Port_Selected.readline().decode(errors="ignore").strip()
                 idx, mag = decoded_data.split(',', 1)
-                chart_x_data[i] = idx
-                chart_y_data[i] = float(mag)
+                if(int(idx) < FFT_BINS // 2):
+                    chart_y_data[FFT_BINS // 2 + int(idx)] = float(mag)
+                else:
+                    chart_y_data[int(idx) - FFT_BINS // 2] = float(mag)
             except (ValueError, IndexError):
                 continue
 
-#        for i in range(FFT_BINS):
-#            COM_Port_Data = COM_Port_Selected.readline()
-#            decoded_data = COM_Port_Data.decode().strip()
-#            idx, mag = decoded_data.split(',')
-#            chart_x_data[i]= idx
-#            chart_y_data[i] = float(mag) if decoded_data else 0.0
+        end_read = time.perf_counter()
+        com_read_time = end_read - start_read
 
-        print(chart_y_data)
+        # --- Measure chart update time ---
+        start_draw = time.perf_counter()
 
         # Update the chart
-        Chart_Line.set_data(chart_x_data, chart_y_data)
-        Chart_Plot.set_xlim(0, FFT_BINS)
-        Chart_Plot.set_ylim(0, max(chart_y_data))
-        Chart_Canvas.draw()
+        for bar, value in zip(Chart_Bar, chart_y_data):
+            bar.set_height(value)
 
-        # Atvaizduoti neapdorotus duomenis tekstiniame laukelyje
-#        COM_Port_UART_Data_Display.config(state='normal')
-#        COM_Port_UART_Data_Display.insert(tk.END, COM_Port_Data + '\n')
-#        COM_Port_UART_Data_Display.config(state='disabled')
-#        COM_Port_UART_Data_Display.yview(tk.END)
+        # Force multiple refresh attempts
+        Chart_Canvas.draw_idle()  # Schedule a draw
+        Chart_Canvas.flush_events()  # Process any pending GUI events
+        Chart_Canvas.draw()  # Force immediate draw
+
+        end_draw = time.perf_counter()
+        chart_update_time = end_draw - start_draw
+
+        # --- Print timings ---
+        print(f"COM read time: {com_read_time*1000:.2f} ms, Chart update time: {chart_update_time*1000:.2f} ms")
+
 
     # Iškviečiama ta pati funkcija iš naujo, sudaromas begalinis ciklas
     Application_window.after(1, Display_UART_Data)
@@ -89,18 +99,11 @@ def Start_Stop_COM_Port():
         Start_Stop_Button["text"] = "Uždaryti COM PORT"
         UART_Started = True
 
-# Tekstinio laukelio išvalymo funkcija
-# Aktyvuojama paspaudus `Clear_Button` mygtuką
-def Clear_All():
-    COM_Port_UART_Data_Display["state"] = "normal"
-    COM_Port_UART_Data_Display.delete('1.0', tk.END)
-    COM_Port_UART_Data_Display["state"] = "disable"
-
 # Grafinės vartotojo sąsajos kūrimas
 # Pagrindinės aplikacijos langas
 Application_window = tk.Tk()
-Application_window.title('Spektras')
-Application_window.geometry("1200x700")
+Application_window.title('Spectrum Bar')
+Application_window.geometry("800x700")
 for i in range(4, 5):
     Application_window.grid_rowconfigure(i, weight=1)
 for i in range(5):
@@ -127,30 +130,39 @@ Clear_Button = tk.Button(Application_window, text = "Išvalyti duomenis",  comma
 
 # Baud rate pasirinkimo sąrašo laukas
 Baud_Rate_Selection = ttk.Combobox(Application_window, state='readonly')
-Baud_Rate_Selection['values'] = [9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600]
+Baud_Rate_Selection['values'] = [9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600, 3000000]
 Baud_Rate_Selection.set(DEFAULT_BAUDRATE)
 
 # Grafikas
 Chart_Figure = Figure()
 Chart_Plot = Chart_Figure.add_subplot(111)
-Chart_Plot.set_title('Duomenų grafikas')
-Chart_Plot.set_xlabel('Atskaitos, n')
+Chart_Plot.set_title('Spektras')
+Chart_Plot.set_xlabel('Dažnis, Hz')
 Chart_Plot.set_ylabel('Amplitudė')
+Chart_Plot.set_xlim(-FREQ/2, FREQ/2)
+Chart_Plot.set_ylim(0, 200)
+Chart_Plot.set_facecolor('#1a1a1a')
 Chart_Plot.grid()
-Chart_Line = Chart_Plot.plot([],[])[0]
+Chart_Bar = Chart_Plot.bar(chart_x_data, chart_y_data, width=(FREQ/FFT_BINS), color='yellow')
 Chart_Canvas = FigureCanvasTkAgg(Chart_Figure, master=Application_window)
 
-# Grafinės vartotojo sąsajos elementų išdėstymas lentelės principu
-UART_Label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
-UART_COM_Port_Label.grid(row=1, column=0, padx=10, pady=10)
-COM_Port_Selection.grid(row=1, column=1, padx=10, pady=10)
-UART_COM_Baud_Rate_Label.grid(row=2, column=0, padx=10, pady=10)
-Baud_Rate_Selection.grid(row=2, column=1, padx=10, pady=10)
-Start_Stop_Button.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
-COM_Port_UART_Data_Display.grid(row=4, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
-Clear_Button.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
 
-Chart_Canvas.get_tk_widget().grid(row=4, column=2, columnspan=3, padx=0, pady=10, sticky="nsew")
+# Title / section label
+UART_Label.grid(row=0, column=0, columnspan=4, pady=10, sticky="")  # center across 4 columns
+
+# COM PORT selection
+UART_COM_Port_Label.grid(row=1, column=0, columnspan=2, sticky="", pady=5)
+COM_Port_Selection.grid(row=1, column=2, columnspan=2, sticky="", pady=5)
+
+# Baud rate selection
+UART_COM_Baud_Rate_Label.grid(row=2, column=0, columnspan=2, sticky="", pady=5)
+Baud_Rate_Selection.grid(row=2, column=2, columnspan=2, sticky="", pady=5)
+
+# Start / Stop button
+Start_Stop_Button.grid(row=3, column=0, columnspan=4, pady=10, sticky="")  # centered across all columns
+
+# Chart canvas
+Chart_Canvas.get_tk_widget().grid(row=4, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
 # Aplikacijos atidarymas ir pagrindinės funkcijos iškvietimas
 Application_window.after(1,Display_UART_Data)

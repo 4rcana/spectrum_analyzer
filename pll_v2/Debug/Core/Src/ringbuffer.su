@@ -1,0 +1,5 @@
+../Core/Src/ringbuffer.c:6:13:rb_init	32	static
+../Core/Src/ringbuffer.c:18:22:rb_isempty	16	static
+../Core/Src/ringbuffer.c:24:22:rb_isfull	16	static
+../Core/Src/ringbuffer.c:32:12:rb_get	16	static
+../Core/Src/ringbuffer.c:46:22:rb_put	24	static

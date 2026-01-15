@@ -86,18 +86,6 @@
               "ASSOCIATED_RESET": {
                 "value": "rstn",
                 "value_src": "constant"
-              },
-              "FREQ_HZ": {
-                "value": "130000000",
-                "value_src": "ip_prop"
-              },
-              "PHASE": {
-                "value": "0.0",
-                "value_src": "ip_prop"
-              },
-              "CLK_DOMAIN": {
-                "value": "/clk_wiz_0_clk_out1",
-                "value_src": "ip_prop"
               }
             }
           },
@@ -776,21 +764,7 @@
         },
         "ports": {
           "alck": {
-            "direction": "I",
-            "parameters": {
-              "FREQ_HZ": {
-                "value": "100000000",
-                "value_src": "ip_prop"
-              },
-              "PHASE": {
-                "value": "0.0",
-                "value_src": "ip_prop"
-              },
-              "CLK_DOMAIN": {
-                "value": "/clk_wiz_0_clk_out1",
-                "value_src": "ip_prop"
-              }
-            }
+            "direction": "I"
           },
           "aresetn": {
             "type": "rst",
@@ -939,8 +913,8 @@
         "ports": [
           "rst_clk_100MHz_100M2/peripheral_aresetn",
           "axis_data_fifo_0/s_axis_aresetn",
-          "axis_window_real2cplx_0/aresetn",
-          "data_to_axis_0/rstn"
+          "data_to_axis_0/rstn",
+          "axis_window_real2cplx_0/aresetn"
         ]
       },
       "rst_clk_100MHz_100M_peripheral_aresetn": {

@@ -51,7 +51,7 @@ module data_to_axis#(
                 m_axis_tdata  <= { {4{~ADC_Data[11]}}, (ADC_Data ^ 12'h800) };
                 m_axis_tvalid <= 1'b1;
                 if (m_axis_tvalid && m_axis_tready) begin
-                    if (sample_count == (PACKET_SIZE - 2)) begin
+                    if (sample_count == (PACKET_SIZE - 1)) begin
                         m_axis_tlast <= 1'b1;
                         sample_count <= {CNT_WIDTH{1'b0}};
                     end else begin

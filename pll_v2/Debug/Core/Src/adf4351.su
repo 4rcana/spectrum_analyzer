@@ -1,0 +1,13 @@
+../Core/Src/adf4351.c:12:6:SPI_assert_CS_LD	8	static
+../Core/Src/adf4351.c:21:6:SPI_deassert_CS_LD	8	static
+../Core/Src/adf4351.c:29:6:SPI_Write	16	static
+../Core/Src/adf4351.c:60:9:adf4350_write	32	static
+../Core/Src/adf4351.c:86:9:adf4350_sync_config	32	static
+../Core/Src/adf4351.c:123:9:adf4350_tune_r_cnt	24	static
+../Core/Src/adf4351.c:142:10:gcd	24	static
+../Core/Src/adf4351.c:165:9:adf4350_set_freq	152	static
+../Core/Src/adf4351.c:302:9:adf4350_setup	48	static
+../Core/Src/adf4351.c:379:9:adf4350_out_altvoltage0_frequency	16	static
+../Core/Src/adf4351.c:391:9:adf4350_out_altvoltage0_frequency_resolution	16	static
+../Core/Src/adf4351.c:408:9:adf4350_out_altvoltage0_refin_frequency	24	static
+../Core/Src/adf4351.c:427:9:adf4350_out_altvoltage0_powerdown	24	static

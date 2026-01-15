@@ -24,7 +24,7 @@
 			xlnx,pcw-act-enet0-peripheral-freqmhz = <125>;
 			xlnx,pcw-nor-grp-sram-cs1-io = "<Select>";
 			xlnx,num-f2p-intr-inputs = <1>;
-			reg = <0x10000000 0x10000>;
+			reg = <0x10000000 0x1000>;
 			xlnx,pcw-mio-18-direction = "out";
 			xlnx,pcw-nand-cycles-t-ar = <1>;
 			xlnx,pcw-p2f-dmac7-intr = <0>;
@@ -926,7 +926,7 @@
 			compatible = "xlnx,ps7-ddr-1.00.a";
 			status = "okay";
 			xlnx,ip-name = "ps7_ddr";
-			reg = <0x00100000 0x1ff00000 0x10000000 0x10000>;
+			reg = <0x00100000 0x1ff00000 0x10000000 0x1000>;
 			xlnx,name = "ps7_ddr_0";
 		};
 		ps7_ocmc_0: ps7_ocmc@f800c000 {

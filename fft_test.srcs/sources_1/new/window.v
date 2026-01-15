@@ -1,13 +1,4 @@
-// AXI4-Stream windowing block
-// - Input:  real samples on s_axis_tdata (signed, DATA_W bits)
-// - Output: complex samples on m_axis_tdata = {imag, real} (imag = 0)
-// - Coefs:  read from text file with $readmemh(), Q1.(COEF_W-1) (e.g. Q15 for COEF_W=16)
-// - tlast:  generated every N samples
-//
-// Notes:
-// 1) COEF_FILE must contain N lines of HEX integers (e.g. 0000 .. 7FFF for Q15 windows).
-// 2) This module is 1-sample buffered (handles backpressure correctly).
-//
+
 module axis_window_real2cplx #(
     parameter integer N         = 1024,
     parameter integer DATA_W    = 16,
@@ -15,23 +6,16 @@ module axis_window_real2cplx #(
 )(
     input  wire                   aclk,
     input  wire                   aresetn,
-
-    // AXI4-Stream input (real)
     input  wire                   s_axis_tvalid,
     output wire                   s_axis_tready,
     input  wire [DATA_W-1:0]      s_axis_tdata,
-    input  wire                   s_axis_tlast,   // unused here (we generate our own)
-
-    // AXI4-Stream output (complex: {imag, real})
+    input  wire                   s_axis_tlast,  
     output wire                   m_axis_tvalid,
     input  wire                   m_axis_tready,
     output wire [DATA_W-1:0]    m_axis_tdata,
     output wire                   m_axis_tlast
 );
 
-    // -----------------------------
-    // clog2 function (Verilog-2001)
-    // -----------------------------
     function integer clog2;
         input integer value;
         integer i;
@@ -44,13 +28,8 @@ module axis_window_real2cplx #(
 
     localparam integer IDX_W  = (N <= 2) ? 1 : clog2(N);
     localparam integer SHIFT  = (COEF_W-1);
-
-    // -----------------------------
-    // Coefficient ROM
-    // -----------------------------
     reg [COEF_W-1:0] window_coefficients [0:N-1];
 
-// Initialize with all values
 initial begin
     window_coefficients[0] = 16'h0000;
     window_coefficients[1] = 16'h0000;
@@ -1079,9 +1058,6 @@ initial begin
     window_coefficients[1023] = 16'h0000;
 end
 
-    // -----------------------------
-    // 1-sample skid buffer
-    // -----------------------------
     reg                    v_reg;
     reg                    last_reg;
     reg signed [DATA_W-1:0] x_reg;
@@ -1097,26 +1073,17 @@ end
     assign m_axis_tvalid = v_reg;
     assign m_axis_tlast  = last_reg;
 
-    // -----------------------------
-    // Multiply + rounding + scaling (combinational)
-    // w is 0..1 in Q1.(COEF_W-1)
-    // y = x * w ; shift right by (COEF_W-1)
-    // -----------------------------
-    wire signed [COEF_W:0] w_s = $signed({1'b0, w_reg}); // positive, signed
+    wire signed [COEF_W:0] w_s = $signed({1'b0, w_reg});
 
     wire signed [DATA_W+COEF_W:0] prod     = x_reg * w_s;
 
-    // rounding: add 0.5 LSB of the discarded part
     wire signed [DATA_W+COEF_W:0] prod_rnd =
         (SHIFT >= 1) ? (prod + ({{(DATA_W+COEF_W){1'b0}},1'b1} << (SHIFT-1))) : prod;
 
     wire signed [DATA_W-1:0] y_re = prod_rnd >>> SHIFT;
 
-    assign m_axis_tdata = { {DATA_W{1'b0}}, y_re }; // imag=0, real=y_re
+    assign m_axis_tdata = { {DATA_W{1'b0}}, y_re }; 
 
-    // -----------------------------
-    // Control: latch input, advance idx, generate tlast
-    // -----------------------------
     always @(posedge aclk or negedge aresetn) begin
         if (!aresetn) begin
             v_reg    <= 1'b0;
@@ -1125,15 +1092,12 @@ end
             w_reg    <= {COEF_W{1'b0}};
             idx      <= {IDX_W{1'b0}};
         end else begin
-            // if output consumed and not replaced same cycle, clear valid
             last_reg<=s_axis_tlast;
             if(~s_axis_tready)begin
                 idx <= {IDX_W{1'b0}};
             end
             else if (out_fire && !in_fire)
                 v_reg <= 1'b0;
-
-            // accept new input when ready
             if (in_fire) begin
                 x_reg <= $signed(s_axis_tdata);
                 w_reg <= window_coefficients[idx];

@@ -1,0 +1,15 @@
+../Core/Src/main.c:95:5:main	5
+../Core/Src/main.c:188:6:SystemClock_Config	4
+../Core/Src/main.c:230:13:MX_SPI1_Init	2
+../Core/Src/main.c:270:13:MX_USART2_UART_Init	2
+../Core/Src/main.c:305:13:MX_GPIO_Init	1
+../Core/Src/main.c:332:6:HAL_UART_RxCpltCallback	1
+../Core/Src/main.c:344:6:cmd_sm_init	1
+../Core/Src/main.c:378:9:numvec_atoi	3
+../Core/Src/main.c:389:5:isNumber	3
+../Core/Src/main.c:397:6:send_error_response	1
+../Core/Src/main.c:402:6:send_accept_response	1
+../Core/Src/main.c:409:6:send_ident	1
+../Core/Src/main.c:413:6:process_command	10
+../Core/Src/main.c:461:6:cmd_sm_update	6
+../Core/Src/main.c:498:6:Error_Handler	1
