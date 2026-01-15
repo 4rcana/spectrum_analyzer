@@ -1,0 +1,64 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Color Coded_ScaleFactor":"0.440647",
+   "Color Coded_TopLeft":"-98,-558",
+   "Default View_ScaleFactor":"0.915069",
+   "Default View_TopLeft":"-498,177",
+   "ExpandedHierarchyInLayout":"",
+   "Grouping and No Loops_ScaleFactor":"0.444855",
+   "Grouping and No Loops_TopLeft":"-83,-535",
+   "guistr":"# # String gsaved with Nlview 7.8.0 2024-04-26 e1825d835c VDI=44 GEI=38 GUI=JA:21.0 threadsafe
+#  -string -flagsOSRD
+preplace port port-id_reset_rtl_0 -pg 1 -lvl 0 -x -850 -y 130 -defaultsOSRD
+preplace port port-id_clk_driver -pg 1 -lvl 9 -x 3030 -y 280 -defaultsOSRD
+preplace port port-id_sys_clock -pg 1 -lvl 0 -x -850 -y 370 -defaultsOSRD
+preplace portBus IO_data_0 -pg 1 -lvl 0 -x -850 -y 510 -defaultsOSRD
+preplace inst rst_clk_100MHz_100M -pg 1 -lvl 6 -x 1930 -y 550 -defaultsOSRD
+preplace inst AD9220_ReadModule_0 -pg 1 -lvl 2 -x 320 -y 660 -defaultsOSRD
+preplace inst data_to_axis_0 -pg 1 -lvl 3 -x 690 -y 690 -defaultsOSRD
+preplace inst axis_window_real2cplx_0 -pg 1 -lvl 4 -x 1100 -y 750 -defaultsOSRD
+preplace inst xfft_0 -pg 1 -lvl 7 -x 2350 -y 870 -defaultsOSRD
+preplace inst xlconcat_0 -pg 1 -lvl 6 -x 1930 -y 710 -defaultsOSRD
+preplace inst xlconstant_1 -pg 1 -lvl 5 -x 1530 -y 1000 -defaultsOSRD
+preplace inst axis_data_fifo_0 -pg 1 -lvl 5 -x 1530 -y 830 -defaultsOSRD
+preplace inst rst_clk_100MHz_100M1 -pg 1 -lvl 2 -x 320 -y 420 -defaultsOSRD
+preplace inst rst_clk_100MHz_100M2 -pg 1 -lvl 3 -x 690 -y 1000 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 1 -x -220 -y 370 -defaultsOSRD
+preplace inst magnitude2_0 -pg 1 -lvl 8 -x 2830 -y 860 -defaultsOSRD
+preplace netloc AD9220_ReadModule_0_ADC_Data 1 2 1 490 660n
+preplace netloc AD9220_ReadModule_0_clk_driver 1 2 7 520J 280 NJ 280 NJ 280 NJ 280 NJ 280 NJ 280 N
+preplace netloc IO_data_0_1 1 0 2 N 510 -130
+preplace netloc axis_data_fifo_0_m_axis_tdata 1 5 1 1700 700n
+preplace netloc axis_data_fifo_0_m_axis_tlast 1 5 2 1700 840 NJ
+preplace netloc axis_data_fifo_0_m_axis_tvalid 1 5 2 1700 880 NJ
+preplace netloc axis_data_fifo_0_s_axis_tready 1 4 1 1290 790n
+preplace netloc axis_window_real2cplx_0_m_axis_tdata 1 4 1 1360 730n
+preplace netloc axis_window_real2cplx_0_m_axis_tlast 1 4 1 1350 750n
+preplace netloc axis_window_real2cplx_0_m_axis_tvalid 1 4 1 1300 770n
+preplace netloc axis_window_real2cplx_0_s_axis_tready 1 3 1 860 730n
+preplace netloc clk_wiz_0_clk_out1 1 1 1 120 350n
+preplace netloc clk_wiz_0_clk_out2 1 1 7 -130J 300 NJ 300 NJ 300 1340J 510 1760 780 2130 1030 2550
+preplace netloc clk_wiz_1_clk_out1 1 1 4 130 320 500 590 890 630 1310
+preplace netloc data_to_axis_0_m_axis_tdata 1 3 1 910 670n
+preplace netloc data_to_axis_0_m_axis_tlast 1 3 1 900 690n
+preplace netloc data_to_axis_0_m_axis_tvalid 1 3 1 870 710n
+preplace netloc magnitude2_0_i_axis_tready 1 7 1 2560 830n
+preplace netloc reset_rtl_0_1 1 0 6 NJ 130 140 290 510J 530 N 530 N 530 N
+preplace netloc rst_clk_100MHz_100M1_peripheral_aresetn 1 1 2 150 310 490
+preplace netloc rst_clk_100MHz_100M2_peripheral_aresetn 1 2 3 520 790 860 870 1360
+preplace netloc rst_clk_100MHz_100M_peripheral_aresetn 1 6 2 2140 1040 2580
+preplace netloc sys_clk_1 1 0 1 N 370
+preplace netloc xfft_0_m_axis_data_tdata 1 7 1 2580 790n
+preplace netloc xfft_0_m_axis_data_tlast 1 7 1 2570 810n
+preplace netloc xfft_0_m_axis_data_tvalid 1 7 1 2550 850n
+preplace netloc xfft_0_s_axis_data_tready 1 5 2 1700 860 NJ
+preplace netloc xlconcat_0_dout 1 6 1 2150 710n
+preplace netloc xlconstant_1_dout 1 5 1 1710 720n
+levelinfo -pg 1 -850 -220 320 690 1100 1530 1930 2350 2830 3030
+pagesize -pg 1 -db -bbox -sgen -1010 -180 3320 1150
+"
+}
+{
+   "da_board_cnt":"5",
+   "da_clkrst_cnt":"3"
+}

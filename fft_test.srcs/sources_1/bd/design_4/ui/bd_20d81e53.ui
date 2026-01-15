@@ -1,0 +1,36 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"0.717935",
+   "Default View_TopLeft":"-117,-451",
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.8.0 2024-04-26 e1825d835c VDI=44 GEI=38 GUI=JA:21.0
+#  -string -flagsOSRD
+preplace port port-id_clk -pg 1 -lvl 0 -x -20 -y 100 -defaultsOSRD
+preplace port port-id_rst -pg 1 -lvl 0 -x -20 -y -30 -defaultsOSRD
+preplace port port-id_s_din -pg 1 -lvl 0 -x -20 -y -50 -defaultsOSRD
+preplace port port-id_tx_lrck -pg 1 -lvl 0 -x -20 -y 160 -defaultsOSRD -left
+preplace port port-id_tx_mclk -pg 1 -lvl 0 -x -20 -y 120 -defaultsOSRD -left
+preplace port port-id_tx_sclk -pg 1 -lvl 0 -x -20 -y 140 -defaultsOSRD -left
+preplace portBus led -pg 1 -lvl 3 -x 1020 -y -100 -defaultsOSRD
+preplace inst axis_i2s2_0 -pg 1 -lvl 1 -x 390 -y -90 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 1 -x 390 -y 140 -defaultsOSRD
+preplace inst proc_sys_reset_0 -pg 1 -lvl 1 -x 390 -y 290 -defaultsOSRD
+preplace inst i2s_reciever_test_0 -pg 1 -lvl 2 -x 820 -y -80 -defaultsOSRD
+preplace netloc axis_i2s2_0_rx_axis_m_data 1 1 1 650 -170n
+preplace netloc axis_i2s2_0_rx_axis_m_last 1 1 1 610 -130n
+preplace netloc axis_i2s2_0_rx_axis_m_valid 1 1 1 630 -150n
+preplace netloc axis_i2s2_0_tx_lrck 1 0 2 20J 70 580
+preplace netloc axis_i2s2_0_tx_mclk 1 0 2 10J 390 600
+preplace netloc axis_i2s2_0_tx_sclk 1 0 2 0J 400 590
+preplace netloc clk_1 1 0 1 30 100n
+preplace netloc clk_wiz_0_clk_out1 1 0 2 200 410 620
+preplace netloc i2s_reciever_test_0_led_clk 1 2 1 1000 -100n
+preplace netloc i2s_reciever_test_0_rx_axis_m_ready 1 0 3 180 430 NJ 430 990
+preplace netloc proc_sys_reset_0_peripheral_aresetn 1 0 2 190 420 640
+preplace netloc rst_1 1 0 1 40 -30n
+preplace netloc s_din_1 1 0 1 50 -50n
+levelinfo -pg 1 -20 390 820 1020
+pagesize -pg 1 -db -bbox -sgen -120 -250 1140 610
+"
+}
+0
